@@ -1,0 +1,64 @@
+// @theme "/usr/share/rofi/themes/Arc-Dark.rasi"
+* {
+  active-background: rgba(29, 31, 33, 17%);
+  background: rgba(45, 48, 59, 75%);
+  foreground: rgba(196, 203, 212, 100%);
+  normal-background: rgba(45, 48, 59, 85%);
+  alternate-background: rgba(64, 69, 82, 85%);
+  element-border: rgba(124, 131, 137, 25%);
+}
+
+configuration {
+	show-icons: true;
+	font: "Noto Sans CJK 16";
+	display-drun: "";
+  icon-theme: "Papirus";
+}
+
+window {
+	background-color: @background;
+	border: 2;
+	border-radius: 8px;
+  transparency: "real";
+  border-color: transparent;
+}
+
+listview {
+  scrollbar: false;
+}
+
+textbox-prompt-colon {
+  str: " ";
+}
+
+element-text {
+  horizontal-align: 0.5;
+  vertical-align: 0.4;
+  text-color: @foreground;
+  background-color: transparent;
+}
+
+element {
+  border: 2;
+  border-color: @element-border;
+	border-radius: 6px;
+  background-color: red;
+}
+
+element.normal.normal {
+  background-color: @normal-background;
+}
+
+element.alternate.normal {
+  background-color: @alternate-background;
+}
+
+element-icon {
+  size: 3ch;
+  padding: 1px;
+  border: 1px;
+  border-radius: 8px;
+  border-color: transparent;
+  background-color: @active-background;
+}
+/* vim:ft=css
