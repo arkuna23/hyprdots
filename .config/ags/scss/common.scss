@@ -1,0 +1,28 @@
+@mixin primary {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+@mixin secondary {
+    font-size: 0.85rem;
+    font-weight: normal;
+}
+
+@mixin user-interact-transition {
+    transition-duration: 50ms;
+    transition-timing-function: ease-in-out;
+}
+@mixin user-scroll-transition {
+    transition-duration: 80ms;
+    transition-timing-function: ease-in-out;
+}
+
+@mixin user-hover-transition {
+    transition-duration: 120ms;
+    transition-timing-function: ease-in-out;
+}
+
+@mixin state-transition {
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+}

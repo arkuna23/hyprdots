@@ -1,5 +1,5 @@
 import = [
-  "./themes/themes/hypr.toml"
+  "./themes/themes/one_dark.toml"
 ]
 
 [colors.primary]
@@ -22,11 +22,11 @@ family = "JetBrainsMono Nerd Font Mono"
 style = "Regular"
 
 [shell]
-args = ["--login"]
-program = "/bin/zsh"
+args = []
+program = "/bin/fish"
 
 [window]
-opacity = 0.7
+opacity = 0.8
 
 [window.padding]
 x = 8

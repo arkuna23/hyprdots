@@ -11,4 +11,10 @@ return require('packer').startup(function()
   use { 'hrsh7th/nvim-cmp' }
 	use { 'wbthomason/packer.nvim' }
   use { 'nvim-lualine/lualine.nvim' }
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = {
+      'nvim-tree/nvim-web-devicons', -- optional, for file icons
+    }
+  }
 end)
