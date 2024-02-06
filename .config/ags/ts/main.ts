@@ -1,13 +1,18 @@
 import { monitorScss } from './utils'
 import { Bar } from './bar/main'
-import Gtk from 'gi://Gtk';
 import App from 'resource:///com/github/Aylur/ags/app.js';
+import PowerMenu from './power/main';
 
 monitorScss();
-Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
+globalThis.openPowerMenu = () => {
+    const menu = PowerMenu();
+    menu.show_all();
+    setTimeout(() => menu.destroy(), 3000);
+}
 
 export default {
     windows: [
         Bar()
-    ]
+    ],
+    icons: `${App.configDir}/assets/icons`
 }

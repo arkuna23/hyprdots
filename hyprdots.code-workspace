@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "ags",
+			"path": "../.config/ags"
+		},
+		{
+			"name": ".config",
+			"path": "../.config"
+		},
+		{
+			"name": "dotfiles",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

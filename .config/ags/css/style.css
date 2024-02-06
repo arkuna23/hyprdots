@@ -1,3 +1,6 @@
+.bar-win {
+  background-color: transparent; }
+
 .bar button {
   all: unset; }
 
@@ -15,13 +18,16 @@
 
 .state-circle, .sys-state, .systray, .volume-slider, .win-title, .workspace,
 .player, .clock {
-  background-color: rgba(23, 69, 110, 0.8);
-  padding-left: 1.2rem;
-  padding-right: 1.2rem;
-  border-radius: 114px; }
+  background-color: rgba(23, 69, 110, 0.8); }
+
+.sys-state {
+  border-radius: 50%; }
 
 .state-circle {
-  font-size: 6px; }
+  font-size: 6px;
+  margin: 0.2rem;
+  min-width: 3rem;
+  background-color: transparent; }
 
 .sys-state * {
   transition-property: opacity;
@@ -40,6 +46,9 @@
 
 .state-icons.hover {
   opacity: 0.3; }
+
+.volume-slider {
+  border-radius: 50%; }
 
 .volume-slider * {
   transition-property: opacity;
@@ -61,6 +70,8 @@
 .win-title {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  border-top-right-radius: 114px;
+  border-bottom-right-radius: 114px;
   padding-left: 4px;
   padding-right: 18px; }
 
@@ -86,7 +97,8 @@
   transition-timing-function: ease-in-out; }
 
 .workspace {
-  padding: 0; }
+  padding: 0;
+  border-radius: 114px; }
 
 .workspace .item {
   font-size: 14px;
@@ -98,17 +110,20 @@
 .player {
   min-height: 3rem;
   padding-left: 0;
-  padding-right: 0; }
+  padding-right: 0;
+  border-radius: 114px; }
 
 .player .info {
   min-width: 18rem;
-  margin-right: 1.2rem; }
+  margin-right: 1.4rem; }
 
 .player .cover-box {
   padding: 0.2rem; }
 
 .player .state-circle {
-  font-size: 0.2rem; }
+  font-size: 0.2rem;
+  min-width: 0;
+  margin: 0; }
 
 .player .cover {
   border-radius: 50%;
@@ -139,6 +154,11 @@
   margin-left: 0.4rem;
   margin-right: 0.4rem; }
 
+.systray {
+  border-radius: 114px;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem; }
+
 .systray .item {
   transition-duration: 120ms;
   transition-timing-function: ease-in-out;
@@ -159,8 +179,11 @@
 .clock {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  border-top-left-radius: 114px;
+  border-bottom-left-radius: 114px;
   padding-right: 4px;
-  margin-right: 0; }
+  margin-right: 0;
+  padding-left: 1.4rem; }
 
-.bar-win {
-  background-color: transparent; }
+.power-bg {
+  background-color: rgba(0, 0, 0, 0.5); }

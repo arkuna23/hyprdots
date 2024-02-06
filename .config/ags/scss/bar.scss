@@ -1,6 +1,10 @@
 @import './common.scss';
 @import './var.scss';
 
+.bar-win {
+    background-color: transparent;
+}
+
 .bar button {
     @include unset;
 }
@@ -10,7 +14,7 @@
 }
 
 .bar {
-    min-height: 3rem;
+    min-height: $bar-height;
     padding-top: 2px;
     padding-bottom: 2px;
 }
@@ -24,14 +28,18 @@
 .state-circle, .sys-state, .systray, .volume-slider, .win-title, .workspace, 
 .player, .clock {
     background-color: $bg-color;
-    padding-left: $edge-dist;
-    padding-right: $edge-dist;
-    border-radius: 114px;
 }
 
 // sys state
+.sys-state {
+    border-radius: 50%;
+}
+
 .state-circle {
     font-size: 6px;
+    margin: 0.2rem;
+    min-width: $bar-height;
+    background-color: transparent;
 }
 
 .sys-state * {
@@ -57,6 +65,9 @@
 }
 
 //  volume slider
+.volume-slider {
+    border-radius: 50%;
+}
 
 .volume-slider * {
     transition-property: opacity;
@@ -80,10 +91,11 @@
 }
 
 // win title name
-
 .win-title {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    border-top-right-radius: 114px;
+    border-bottom-right-radius: 114px;
     padding-left: 4px;
     padding-right: 18px;
 }
@@ -119,6 +131,7 @@
 
 .workspace {
     padding: 0;
+    border-radius: 114px
 }
 
 .workspace .item {
@@ -132,9 +145,10 @@
 // music bar
 
 .player {
-    min-height: 3rem;
+    min-height: $bar-height;
     padding-left: 0;
     padding-right: 0;
+    border-radius: 114px;
 }
 
 .player .info {
@@ -148,6 +162,8 @@
 
 .player .state-circle {
     font-size: 0.2rem;
+    min-width: 0;
+    margin: 0;
 }
 
 .player .cover {
@@ -187,6 +203,12 @@
 }
 
 // system tray
+.systray {
+    border-radius: 114px;
+    padding-left: $edge-dist;
+    padding-right: $edge-dist;
+}
+
 .systray .item {
     @include user-hover-transition;
     transition-property: box-shadow, padding-bottom;
@@ -208,6 +230,9 @@
 .clock {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    border-top-left-radius: 114px;
+    border-bottom-left-radius: 114px;
     padding-right: 4px;
     margin-right: 0;
+    padding-left: $edge-dist;
 }

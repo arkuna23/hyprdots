@@ -8,13 +8,13 @@ export const BarCenter = () => Widget.CenterBox({
     class_name: 'center',
     start_widget: Widget.Box({
         children: [
-            Spacing(), AudioBar()
+            Spacing(), VolumeSlider()
         ]
     }),
-    center_widget: Workspaces(),
+    center_widget: AudioBar(),
     end_widget: Widget.Box({
         children: [
-            VolumeSlider(), Spacing()
+            Workspaces(), Spacing()
         ]
     })
 })

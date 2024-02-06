@@ -1,8 +1,8 @@
-import App from "resource:///com/github/Aylur/ags/app.js";
-import { readFile } from "resource:///com/github/Aylur/ags/utils.js";
+import App from "resource:///com/github/Aylur/ags/app.js"
+import { readFile } from "resource:///com/github/Aylur/ags/utils.js"
 
 export const WinClassRename = (() => {
-    const classes = JSON.parse(readFile(`${App.configDir}/config/class.json`));
+    const classes = JSON.parse(readFile(`${App.configDir}/config/class-rename.json`));
     return (name: string) => {
         const cls = classes[name];
         return cls ? cls : name
