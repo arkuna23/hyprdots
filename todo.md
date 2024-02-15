@@ -4,7 +4,7 @@
   - [ ] Styles
   - [ ] Bar
     - [ ] workspace
-      - [ ] fixed buttons
+      - [x] fixed buttons
     - [ ] systray menu
     - [ ] music bar
       - [ ] close animation

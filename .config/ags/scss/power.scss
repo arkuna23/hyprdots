@@ -1,3 +1,27 @@
+@import './lib.scss';
+
 .power-bg {
     background-color: rgba($color: black, $alpha: 0.5);
+}
+
+.power-bg.closing {
+    @include state-transition;
+    transition-property: background-color;
+    background-color: black;
+}
+
+.power-bg.closing * {
+    @include state-transition;
+    transition-property: opacity;
+    opacity: 0;
+}
+
+.power-btn-box {
+    margin: 1rem;
+}
+
+.power-btn {
+    @include unset;
+    min-height: 10rem;
+    min-width: 4rem;
 }

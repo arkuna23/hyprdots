@@ -5,9 +5,7 @@ import PowerMenu from './power/main';
 
 monitorScss();
 globalThis.openPowerMenu = () => {
-    const menu = PowerMenu();
-    menu.show_all();
-    setTimeout(() => menu.destroy(), 3000);
+    PowerMenu().show_all();
 }
 
 export default {

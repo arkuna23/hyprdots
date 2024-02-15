@@ -5,6 +5,8 @@ import { hyprland } from 'resource:///com/github/Aylur/ags/service/hyprland.js'
 import Gio from 'gi://Gio';
 import { Gtk } from 'gi://Gtk';
 import AgsIcon from 'types/widgets/icon';
+import { Props } from 'types/service';
+import AgsBox from 'types/widgets/box';
 
 export function getDirChildren(path: string) {
     let iter = Gio.File.new_for_path(path).enumerate_children(
@@ -44,12 +46,17 @@ export function monitorScss() {
     }
 }
 
-export function dispatchWorkspace(name: string) {
-    hyprland.sendMessage(`dispatch workspace ${name}`)
+export function dispatchWorkspace(id: number) {
+    hyprland.sendMessage(`dispatch workspace ${id}`)
 }
 
-export function Spacing() {
-    return Widget.Box({ class_name: 'spacing' });
+export function Spacing(class_names: string[] = [], props: Props<AgsBox> = {}) {
+    return Widget.Box({
+        ...props, 
+        class_names: ['spacing', ...class_names], 
+        hexpand: true,
+        vexpand: true
+    });
 }
 
 export function invisibleBarElement(self: Gtk.Widget) {
@@ -82,3 +89,5 @@ export const initIconFromBuf = (icon: AgsIcon, buf: any) =>
     onFirstDrawAction(icon, () => icon.set_from_pixbuf(buf));
 
 export const SCRIPT_DIR = `${App.configDir}/scripts`;
+
+export const asyncSleep = (timeMs: number) => new Promise(resolve => setTimeout(resolve, timeMs));

@@ -1,6 +1,8 @@
 import Widget from "resource:///com/github/Aylur/ags/widget.js"
 import { exec } from "resource:///com/github/Aylur/ags/utils.js"
 import { SysState, SysTray } from "./system"
+import { Spacing } from "ts/utils"
+import { VolumeSlider } from "./audio";
 
 export const Clock = () => Widget.Box({
     class_name: 'clock',
@@ -25,8 +27,7 @@ export const Clock = () => Widget.Box({
 
 export const BarRight = () => Widget.Box({
     class_name: 'right',
-    hpack: 'end',
     children: [
-        SysTray(), SysState(), Clock()
+        VolumeSlider(), Spacing(), SysTray(), SysState(), Clock()
     ]
 })

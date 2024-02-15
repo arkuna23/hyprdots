@@ -1,4 +1,4 @@
-import Service, { Binding } from "resource:///com/github/Aylur/ags/service.js"
+import Service from "resource:///com/github/Aylur/ags/service.js"
 import { GLib } from "ts/imports";
 import SystemService from "./system";
 

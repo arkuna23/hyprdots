@@ -1,6 +1,8 @@
 import { hyprland } from "resource:///com/github/Aylur/ags/service/hyprland.js";
 import { Widget } from "resource:///com/github/Aylur/ags/widget.js";
+import { Spacing } from "ts/utils";
 import { WinClassRename as ClientClassRename } from "ts/vars";
+import MediaBar from "./mediabar";
 
 export const WinTitle = () => {
     const title = Widget.Box({
@@ -30,6 +32,6 @@ export const WinTitle = () => {
 export const BarLeft = () => Widget.Box({
     class_name: 'left',
     children: [
-        WinTitle()
+        WinTitle(), Spacing(), MediaBar()
     ]
 })
