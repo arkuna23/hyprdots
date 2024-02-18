@@ -2,7 +2,7 @@ import { Variable } from "resource:///com/github/Aylur/ags/variable.js";
 import Service from "resource:///com/github/Aylur/ags/service.js";
 import { exec } from "resource:///com/github/Aylur/ags/utils.js";
 import { execAsync } from "resource:///com/github/Aylur/ags/utils.js";
-import { PspecFlag, PspecType } from "types/gobject";
+import { PspecFlag, PspecType } from "types/utils/gobject";
 
 class _SystemService extends Service {
     static readonly props: { [key: string]: [type: PspecType, handle: PspecFlag] } = {
@@ -80,7 +80,7 @@ class _SystemService extends Service {
             }]
         });
         // AMD GPU
-        execAsync("radeontop -i 2 -d /tmp/gpu_info -t 25").then((v) => {
+        execAsync("radeontop -i 2 -d /tmp/gpu_info -t 25").then((_) => {
             console.error("radeontop stopped");
         });
         return usage;

@@ -3,10 +3,9 @@ import { Widget } from 'resource:///com/github/Aylur/ags/widget.js'
 import { exec, monitorFile } from 'resource:///com/github/Aylur/ags/utils.js'
 import { hyprland } from 'resource:///com/github/Aylur/ags/service/hyprland.js'
 import Gio from 'gi://Gio';
-import { Gtk } from 'gi://Gtk';
-import AgsIcon from 'types/widgets/icon';
-import { Props } from 'types/service';
-import AgsBox from 'types/widgets/box';
+import Gtk from 'gi://Gtk?version=3.0';
+import AgsIcon, { Icon } from 'types/widgets/icon';
+import { BoxProps } from 'types/widgets/box';
 
 export function getDirChildren(path: string) {
     let iter = Gio.File.new_for_path(path).enumerate_children(
@@ -39,7 +38,7 @@ export function monitorScss() {
                 console.log(`${filename} changed, reloading scss`);
                 loadScss();
             }
-        }, 'directory')
+        })
     } catch (e) {
         console.error(`monitor scss error: ${e}`)
         return
@@ -47,10 +46,10 @@ export function monitorScss() {
 }
 
 export function dispatchWorkspace(id: number) {
-    hyprland.sendMessage(`dispatch workspace ${id}`)
+    hyprland.message(`dispatch workspace ${id}`)
 }
 
-export function Spacing(class_names: string[] = [], props: Props<AgsBox> = {}) {
+export function Spacing(class_names: string[] = [], props: BoxProps = {}) {
     return Widget.Box({
         ...props, 
         class_names: ['spacing', ...class_names], 
@@ -82,10 +81,11 @@ export const onFirstDrawAction = (widget: Gtk.Widget, func: () => void, delay: n
     const id = widget.connect('draw', () => {
         setTimeout(func, delay);
         widget.disconnect(id);
+        Widget.Icon
     });
 }
 
-export const initIconFromBuf = (icon: AgsIcon, buf: any) => 
+export const initIconFromBuf = (icon: Icon<any>, buf: any) => 
     onFirstDrawAction(icon, () => icon.set_from_pixbuf(buf));
 
 export const SCRIPT_DIR = `${App.configDir}/scripts`;

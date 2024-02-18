@@ -1,8 +1,8 @@
 import { Audio } from "resource:///com/github/Aylur/ags/service/audio.js";
 import { Widget } from "resource:///com/github/Aylur/ags/widget.js";
+import { AgsCircularProgress } from "ts/imports";
 import AnimationService, { EaseFunc } from "ts/services/animation";
 import { AnimationDuration } from "ts/vars";
-import AgsCircularProgress from "types/widgets/circularprogress";
 
 const audio = new Audio();
 export const VolumeSlider = (type: 'speaker' | 'microphone' = 'speaker') => {
@@ -69,13 +69,15 @@ export const VolumeSlider = (type: 'speaker' | 'microphone' = 'speaker') => {
             child: Widget.CircularProgress({
                 class_names: ['state-circle'],
                 rounded: true,
-                attribute: Symbol()
+                attribute: {
+                    symbol: Symbol()
+                }
             }).hook(audio, (self: AgsCircularProgress) => {
                 let volume = audio[type]?.volume || 0
                 AnimationService.animatedProp<typeof self>({
                     obj: self,
                     prop_name: 'value',
-                    symbol: self.attribute,
+                    symbol: self.attribute!['symbol'],
                     duration: AnimationDuration.Scroll,
                     easing: EaseFunc.easeInQuad,
                     to: volume

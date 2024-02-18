@@ -16,7 +16,7 @@ function update()
 
 update alacritty themes
 update gtk-3.0
-update ags node_modules types package.json package-lock.json
+update ags node_modules types package.json package-lock.json css
 update nvim
 update mako
 update hypr

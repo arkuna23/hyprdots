@@ -1,6 +1,6 @@
+import { AgsCircularProgress } from "ts/imports";
 import AnimationService, { AnimateBaseOpt, EaseFunc } from "ts/services/animation";
 import { AnimationDuration } from "ts/vars";
-import AgsCircularProgress from "types/widgets/circularprogress";
 
 export type AnimatedCircularProgress = {
     bar: AgsCircularProgress,

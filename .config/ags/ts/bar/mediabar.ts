@@ -1,52 +1,48 @@
-import Gtk from 'gi://Gtk';
+import Gtk from 'gi://Gtk?version=3.0';
 import { MprisPlayer } from 'resource:///com/github/Aylur/ags/service/mpris.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js'
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
-import AgsEventBox from 'types/widgets/eventbox';
 import { Props } from 'types/service';
 import { onFirstDrawAction } from 'ts/utils';
 import { AnimatedCircularProgress } from 'ts/components/widgets';
-import { LabelProps } from 'types/widgets/label';
-import { GLib } from 'ts/imports';
-import AgsStack from 'types/widgets/stack';
-import AgsBox from 'types/widgets/box';
-import { Connectable } from 'resource:///com/github/Aylur/ags/widgets/widget.js';
+import { AgsBox, AgsEventBox, AgsStack } from 'ts/imports';
 import { AnimationDuration, PX_PER_REM } from 'ts/vars';
 import AnimationService, { EaseFunc } from 'ts/services/animation';
+import { LabelProps } from 'types/widgets/label';
+import GLib from 'gi://GLib';
 
 const InfoBoxWidth = (18 + 1.2) * PX_PER_REM;
 
-const labelStack = (props: LabelProps, duration: number) => {
+const labelStack = (props: LabelProps<unknown>, duration: number, init: string) => {
     const stack = Widget.Stack({
         transition_duration: duration,
         attribute: {
             label: '',
             change(label: string, isPrev: boolean) {
-                const items = stack.items;
-
                 if (typeof props !== 'object')
                     props = {};
-                props.label = GLib.markup_escape_text(label, -1);
 
-                items.push(['1', Widget.Label(props)]);
-                stack.items = items;
+                stack.attribute.label = label;
+                label = GLib.markup_escape_text(label, -1) ?? 'invalid label';
                 stack.transition = isPrev ? 'slide_right' : 'slide_left';
-                stack.shown = '1';
-                this.label = label;
+                stack.children['next'].label = label;
+                stack.shown = 'next';
                 setTimeout(() => {
-                    if (stack.is_destroyed) return;
-                    items.shift()?.[1].destroy();
-                    items[0][0] = '0';
-                    stack.items = items;
-                }, duration);
+                    stack.transition = 'none';
+                    stack.children['curr'].label = label;
+                    stack.shown = 'curr';
+                }, duration);   
             }
         },
-        items: [['0', Widget.Label()]]
+        children: {
+            'curr': Widget.Label({ label: init, ...(props as any) }),
+            'next': Widget.Label({ label: init, ...(props as any) })
+        }
     });
     return stack;
 }
 
-const bindMusicPlayer = (bar: AnimatedCircularProgress, coverImage: Connectable<AgsBox>, player: MprisPlayer) => {
+const bindMusicPlayer = (bar: AnimatedCircularProgress, coverImage: AgsBox, player: MprisPlayer) => {
     return {
         interval: setInterval(() => bar.value_animated = player.position / player.length, 1000),
         coverImage: coverImage.bind('css', player, 'cover_path', path => {
@@ -56,8 +52,8 @@ const bindMusicPlayer = (bar: AnimatedCircularProgress, coverImage: Connectable<
 }
 
 type PlayerCover = {
-    interval?: number,
-    coverImage: AgsBox & Connectable<AgsBox>,
+    interval?: GLib.Source,
+    coverImage: AgsBox,
     progressBar: AnimatedCircularProgress,
 }
 
@@ -112,7 +108,7 @@ const createPlayerCover = (player?: MprisPlayer) => {
 }
 
 type PlayerBox = PlayerCover & {
-    playerBox: AgsBox
+    playerBox: AgsBox<{ symbol: Symbol }>
 }
 
 type PlayerBoxOpts = {
@@ -121,7 +117,7 @@ type PlayerBoxOpts = {
 }
 
 const createPlayerBox = (() => {
-    const createMainBox = (props: Props<AgsBox>) => Widget.Box({
+    const createMainBox = (props: Props<AgsBox | undefined>) => Widget.Box({
         ...props,
         attribute: {
             symbol: Symbol(),
@@ -148,7 +144,7 @@ const createPlayerBox = (() => {
                 justification: 'center',
                 use_markup: true,
                 max_width_chars: 15
-            }, 350).hook(Mpris, (self, busName) => {
+            }, 350, 'No Music').hook(Mpris, (self, busName) => {
                 if (busName === player.bus_name && player.track_title !== self.attribute.label) {
                     self.attribute.change(player.track_title, prev);
                     prev = false;
@@ -169,7 +165,7 @@ const createPlayerBox = (() => {
                 justification: 'center',
                 use_markup: true,
                 max_width_chars: 10
-            }, 350).hook(Mpris, (self, busName) => {
+            }, 350, '（¯\\_(ツ)_/¯）').hook(Mpris, (self, busName) => {
                 if (busName === player.bus_name && player.track_artists.join(', ') !== self.attribute.label) {
                     self.attribute.change(player.track_artists.join(', '), prev);
                     prev = false;
@@ -222,14 +218,14 @@ const createPlayerBox = (() => {
                 ]
             }); // music control
     
-            const order = ['artists', 'control'];
+            const order: ("artists" | "control")[] = ['artists', 'control'];
             const rightStack = Widget.Stack({
                 transition: 'crossfade',
                 transition_duration: AnimationDuration.Scroll,
-                items: [
-                    ['artists', artists],
-                    ['control', control]
-                ],
+                children: {
+                    'artists': artists,
+                    'control': control
+                },
                 setup(self) {
                     onFirstDrawAction(self, () => self.shown = order[0]);
                 },
@@ -292,9 +288,9 @@ const addPlayerBox =  (stack: AgsStack, player?: MprisPlayer, childrenMap?: Play
     // todo animations
     if (!(player && childrenMap)) {
         firstBox = createPlayerBox();
-        stack.items = [[
-            '0', firstBox!.playerBox
-        ]];
+        stack.children = {
+            '0': firstBox!.playerBox
+        }
         stack.shown = '0'
     } else {
         if (childrenMap.has(player.bus_name)) return;
@@ -302,15 +298,16 @@ const addPlayerBox =  (stack: AgsStack, player?: MprisPlayer, childrenMap?: Play
         let playerBox: PlayerBox;
         if (childrenMap.size === 0) {
             createPlayerBox({ player, firstBox });
-            const items = stack.items;
-            items[0][0] = player.bus_name;
-            stack.items = items;
+            const children = stack.children;
+            children[player.bus_name] = children['0'];
+            delete children['0'];
+            stack.children = children;
             playerBox = firstBox!;
         } else {
             playerBox = createPlayerBox({ player })!;
-            const items = stack.items;
-            items.push([player.bus_name, playerBox.playerBox]);
-            stack.items = items;
+            const children = stack.children;
+            children[player.bus_name] = playerBox.playerBox;
+            stack.children = children;
             stack.shown = player.bus_name;
         }
         childrenMap.set(player.bus_name, playerBox);
@@ -322,7 +319,7 @@ const addPlayerBox =  (stack: AgsStack, player?: MprisPlayer, childrenMap?: Play
 const removePlayer = (busName: string, childrenMap: PlayerMap, stack: AgsStack) => {
     const player = childrenMap.get(busName);
     if (player) {
-        clearInterval(player.interval);
+        clearInterval(player.interval!);
         childrenMap.delete(busName);
         if (childrenMap.size === 0) {
             const { playerBox, coverImage } = player;
@@ -338,16 +335,21 @@ const removePlayer = (busName: string, childrenMap: PlayerMap, stack: AgsStack) 
                 },
                 duration: AnimationDuration.State,
                 easing: EaseFunc.easeInQuad,
-                symbol: playerBox.attribute.symbol,
+                symbol: playerBox.attribute!['symbol'],
             })
             player.progressBar.value_animated = 0;
             player.coverImage.css = `background-image: none;`;
             firstBox = player;
         } else {
-            const items = stack.items;
-            items.find((item) => item[0] === busName)?.[1].destroy();
-            items.splice(items.findIndex(([name, _]) => busName === name), 1);
-            stack.items = items;
+            const children = stack.children;
+            for (const [key, value] of Object.entries(children)) {
+                if (key === busName) {
+                    value.destroy();
+                    delete children[key];
+                    break;
+                }
+            }
+            stack.children = children;
         }
         print(`remove player ${busName}`)
     }
@@ -387,7 +389,7 @@ const AudioBar = () => {
         removePlayer(busName, childrenMap, self);
         busNames.splice(busNames.indexOf(busName), 1);
     }, 'player-closed');
-    const change = (diff: number) => (self: AgsEventBox) => {
+    const change = (diff: number) => (self: AgsEventBox<{ curr: number }>) => {
         const next = (self.attribute.curr + busNames.length + diff) % busNames.length;
         self.attribute.curr = next;
         stack.shown = busNames[next];

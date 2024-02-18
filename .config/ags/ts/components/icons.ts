@@ -1,6 +1,6 @@
+import GdkPixbuf20 from "gi://GdkPixbuf";
 import App from "resource:///com/github/Aylur/ags/app.js";
 import { readFile } from "resource:///com/github/Aylur/ags/utils.js";
-import { GdkPixbuf } from "ts/imports";
 
 export function getIconPath(name: string, type: 'svg' | 'png' = 'svg') {
     return `${App.configDir}/assets/icons/${name}.${type}`;
@@ -12,15 +12,17 @@ export interface SvgOptions {
     height?: number;
 }
 
+const encoder = new TextEncoder()
 export function recolorSvgToBuf(props: SvgOptions & { svg: string }) {
-    const loader = new GdkPixbuf.PixbufLoader();
+    const loader = new GdkPixbuf20.PixbufLoader();
     const { svg, fill = 'white', width, height } = props;
     let svgStr = svg.replace(/fill=".*?"/g, `fill="${fill}"`)
     if (width)
         svgStr = svgStr.replace(/width=".*?"/g, `width="${width}"`)
     if (height)
         svgStr = svgStr.replace(/height=".*?"/g, `height="${height}"`)
-    loader.write(svgStr);
+    
+    loader.write(encoder.encode(svgStr));
     loader.close();
     
     return loader.get_pixbuf();
