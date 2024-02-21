@@ -28,10 +28,11 @@ const labelStack = (props: LabelProps<unknown>, duration: number, init: string) 
                 stack.children['next'].label = label;
                 stack.shown = 'next';
                 setTimeout(() => {
+                    if (stack.is_destroyed) return;
                     stack.transition = 'none';
                     stack.children['curr'].label = label;
                     stack.shown = 'curr';
-                }, duration);   
+                }, duration);
             }
         },
         children: {
@@ -342,14 +343,21 @@ const removePlayer = (busName: string, childrenMap: PlayerMap, stack: AgsStack) 
             firstBox = player;
         } else {
             const children = stack.children;
-            for (const [key, value] of Object.entries(children)) {
+            let last: string | undefined;
+            const entries = Object.entries(children);
+            for (const [key, value] of entries) {
                 if (key === busName) {
-                    value.destroy();
-                    delete children[key];
+                    console.log(stack.transition)
+                    stack.shown = last ?? entries[1][0];
+                    setTimeout(() => {
+                        value.destroy();
+                        delete children[key];
+                        stack.children = children;
+                    }, stack.transition_duration);
                     break;
                 }
+                last = key;
             }
-            stack.children = children;
         }
         print(`remove player ${busName}`)
     }

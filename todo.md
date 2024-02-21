@@ -7,7 +7,7 @@
       - [x] fixed buttons
     - [ ] systray menu
     - [ ] music bar
-      - [ ] close animation
+      - [x] close animation
   - [ ] Power Menu
     - [ ] styles
     - [ ] clock

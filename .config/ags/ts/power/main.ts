@@ -24,14 +24,12 @@ const MenuButton = (label: string, icon: string, win: AgsWindow, action: () => v
                     size: PX_PER_REM * 3,
                     icon
                 }),
-                on_primary_click() {
+                async on_primary_click() {
                     (win.child as any).class_names = ['power-bg', 'closing'];
                     win.get_window()?.set_cursor(emptyCursor);
-                    setTimeout(async () => {
-                        action();
-                        await asyncSleep(100);
-                        win.close();
-                    }, 1000);
+                    await asyncSleep(2000);
+                    action();
+                    win.close();
                 }
             }),
             Widget.Label({
@@ -54,8 +52,14 @@ const PowerMenuBox = (win: AgsWindow) => {
             children: [
                 MenuButton('Power Off', 'system-shutdown-symbolic', win, () => exec('shutdown now')),
                 MenuButton('Reboot', 'system-reboot-symbolic', win, () => exec('reboot')),
-                MenuButton('Suspend', 'weather-clear-night-symbolic', win, () => exec('systemctl suspend')),
-                MenuButton('Hibernate', 'weather-few-clouds-night-symbolic', win, () => exec('systemctl hibernate')),
+                MenuButton('Suspend', 'weather-clear-night-symbolic', win, () => {
+                    exec('systemctl suspend')
+                    exec('hyprlock')
+                }),
+                MenuButton('Hibernate', 'weather-few-clouds-night-symbolic', win, () => {
+                    exec('systemctl hibernate')
+                    exec('hyprlock')
+                }),
             ]
         }),
         setup(self) {
@@ -98,11 +102,9 @@ export const openPowerMenu = (() => {
         active = true;
         const win = PowerMenu(hyprland.active.monitor.id);
         win.on('key-press-event', (_, event: Gdk.Event) => {
-            if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+            if (event.get_keyval()[1] === Gdk.KEY_Escape)
                 win.close();
-                active = false;
-            }
-        });
+        }).on('destroy', () => active = false);
         win.show_all();
     }
 })()
