@@ -312,7 +312,7 @@ const addPlayerBox =  (stack: AgsStack, player?: MprisPlayer, childrenMap?: Play
             stack.shown = player.bus_name;
         }
         childrenMap.set(player.bus_name, playerBox);
-        print(`add player ${player.bus_name}`)
+        console.log(`add player ${player.bus_name}`)
         return playerBox;
     }
 }
@@ -347,7 +347,6 @@ const removePlayer = (busName: string, childrenMap: PlayerMap, stack: AgsStack) 
             const entries = Object.entries(children);
             for (const [key, value] of entries) {
                 if (key === busName) {
-                    console.log(stack.transition)
                     stack.shown = last ?? entries[1][0];
                     setTimeout(() => {
                         value.destroy();
@@ -359,7 +358,7 @@ const removePlayer = (busName: string, childrenMap: PlayerMap, stack: AgsStack) 
                 last = key;
             }
         }
-        print(`remove player ${busName}`)
+        console.log(`remove player ${busName}`)
     }
 
     return player;

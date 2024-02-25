@@ -1,6 +1,7 @@
 # Naraku's Hyprland Desktop
 
 - [ ] Ags
+  - [ ] Layer Component(can be used in power menu)
   - [ ] Styles
   - [ ] Bar
     - [ ] workspace
@@ -12,6 +13,7 @@
     - [ ] styles
     - [ ] clock
     - [ ] user info
+    - [ ] pause music when sleep,...etc
   - [ ] Simple TODO List
   - [ ] System State Overlay
     - [ ] CPU,RAM,GPU

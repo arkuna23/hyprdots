@@ -27,9 +27,8 @@ const MenuButton = (label: string, icon: string, win: AgsWindow, action: () => v
                 async on_primary_click() {
                     (win.child as any).class_names = ['power-bg', 'closing'];
                     win.get_window()?.set_cursor(emptyCursor);
-                    await asyncSleep(2000);
+                    await asyncSleep(200);
                     action();
-                    win.close();
                 }
             }),
             Widget.Label({
@@ -53,12 +52,12 @@ const PowerMenuBox = (win: AgsWindow) => {
                 MenuButton('Power Off', 'system-shutdown-symbolic', win, () => exec('shutdown now')),
                 MenuButton('Reboot', 'system-reboot-symbolic', win, () => exec('reboot')),
                 MenuButton('Suspend', 'weather-clear-night-symbolic', win, () => {
+                    exec('loginctl lock-session')
                     exec('systemctl suspend')
-                    exec('hyprlock')
                 }),
                 MenuButton('Hibernate', 'weather-few-clouds-night-symbolic', win, () => {
+                    exec('loginctl lock-session')
                     exec('systemctl hibernate')
-                    exec('hyprlock')
                 }),
             ]
         }),
@@ -96,17 +95,25 @@ const PowerMenu = (monitor = 0) => Widget.Window({
 } as any)
 
 export const openPowerMenu = (() => {
-    let active = false;
     return () => {
-        if (active) return;
-        active = true;
-        const win = PowerMenu(hyprland.active.monitor.id);
+        let win = globalThis['powermenu'];
+        if (win) return;
+        win = PowerMenu(hyprland.active.monitor.id);
         win.on('key-press-event', (_, event: Gdk.Event) => {
             if (event.get_keyval()[1] === Gdk.KEY_Escape)
                 win.close();
-        }).on('destroy', () => active = false);
+        }).on('destroy', () => globalThis['powermenu'] = undefined);
+        globalThis['powermenu'] = win;
         win.show_all();
     }
 })()
+
+export const closePowerMenu = () => {
+    const win = globalThis['powermenu'];
+    if (win) {
+        win.close();
+        globalThis['powermenu'] = undefined;
+    }
+}
 
 export default PowerMenu
