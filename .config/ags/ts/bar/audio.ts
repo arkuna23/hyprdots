@@ -1,5 +1,5 @@
 import { Audio } from "resource:///com/github/Aylur/ags/service/audio.js";
-import { Widget } from "resource:///com/github/Aylur/ags/widget.js";
+import Widget from "resource:///com/github/Aylur/ags/widget.js";
 import { AgsCircularProgress } from "ts/imports";
 import AnimationService, { EaseFunc } from "ts/services/animation";
 import { AnimationDuration } from "ts/vars";

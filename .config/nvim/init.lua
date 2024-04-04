@@ -1,7 +1,4 @@
-require('basic')
-require('plugins')
-require("tree")
-require("treesitter")
+require("config.lazy")
 if vim.g.neovide then
-  require("vide")
+	require("vide")
 end

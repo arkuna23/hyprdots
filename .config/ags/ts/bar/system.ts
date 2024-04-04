@@ -1,5 +1,5 @@
 import { TrayItem, systemTray } from "resource:///com/github/Aylur/ags/service/systemtray.js";
-import { Widget } from "resource:///com/github/Aylur/ags/widget.js";
+import Widget from "resource:///com/github/Aylur/ags/widget.js";
 import { AnimatedCircularProgress } from "ts/components/widgets";
 import { EaseFunc } from "ts/services/animation";
 import SystemService from "ts/services/system";

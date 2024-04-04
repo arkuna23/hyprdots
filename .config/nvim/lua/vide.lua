@@ -1,8 +1,5 @@
-local alpha = function()
-  return string.format("%x", math.floor(255 * vim.g.transparency or 0.8))
-end
 local env = function(name)
-  return os.getenv(name)
+	return os.getenv(name)
 end
 
 vim.o.guifont = env("CODE_FONT") .. ":h13"

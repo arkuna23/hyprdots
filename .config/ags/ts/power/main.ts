@@ -1,4 +1,4 @@
-import { Widget } from "resource:///com/github/Aylur/ags/widget.js";
+import Widget from "resource:///com/github/Aylur/ags/widget.js";
 import Gtk from "gi://Gtk?version=3.0";
 import Gdk from "gi://Gdk";
 import GdkPixbuf from "gi://GdkPixbuf";
@@ -65,7 +65,6 @@ const PowerMenuBox = (win: AgsWindow) => {
             onFirstDrawAction(self, () => self.reveal_child = true);
         },
     })
-
 }
 
 const PowerMenuBg = (win: AgsWindow) => {

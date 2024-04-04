@@ -9,6 +9,7 @@
     - [ ] systray menu
     - [ ] music bar
       - [x] close animation
+    - [ ] Net State
   - [ ] Power Menu
     - [ ] styles
     - [ ] clock

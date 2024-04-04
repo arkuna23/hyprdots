@@ -18,9 +18,7 @@ try {
         '--external', 'resource://*',
         '--external', 'gi://*',
     ]))
+    await import(`file://${outDir}/main.js`)
 } catch (err) {
     console.error(err);
 }
-
-const main = await import(`file://${outDir}/main.js`)
-export default main.default

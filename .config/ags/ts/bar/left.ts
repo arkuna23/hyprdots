@@ -1,5 +1,5 @@
 import { hyprland } from "resource:///com/github/Aylur/ags/service/hyprland.js";
-import { Widget } from "resource:///com/github/Aylur/ags/widget.js";
+import Widget from "resource:///com/github/Aylur/ags/widget.js";
 import { Spacing } from "ts/utils";
 import { WinClassRename as ClientClassRename } from "ts/vars";
 import MediaBar from "./mediabar";

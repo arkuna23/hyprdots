@@ -20,5 +20,5 @@ export type AgsBox<A extends Attr = unknown> = Box<Gtk30.Widget, A>
 export type AgsStack<A extends Attr = unknown> = Stack<{ [name: string]: Gtk30.Widget }, A>
 export type AgsEventBox<A extends Attr = unknown> = EventBox<Gtk30.Widget, A>
 export type AgsButton<A extends Attr = unknown> = Button<Gtk30.Widget, A> 
-export type AgsOverlay<A extends Attr = unknown> = Overlay<Gtk30.Widget, A>
+export type AgsOverlay<A extends Attr = unknown> = Overlay<Gtk30.Widget, Gtk30.Widget, A>
 export type AgsLabel<A extends Attr = unknown> = Label<A>

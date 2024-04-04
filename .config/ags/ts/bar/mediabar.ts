@@ -74,7 +74,7 @@ const createPlayerCover = (player?: MprisPlayer) => {
         class_names: ['cover']
     });
     const coverOverlay = Widget.Overlay({
-        child: progress.bar,
+        child: progress.bar as any,
         halign: Gtk.Align.CENTER,
         valign: Gtk.Align.CENTER,
     });
@@ -300,9 +300,12 @@ const addPlayerBox =  (stack: AgsStack, player?: MprisPlayer, childrenMap?: Play
         if (childrenMap.size === 0) {
             createPlayerBox({ player, firstBox });
             const children = stack.children;
-            children[player.bus_name] = children['0'];
-            delete children['0'];
-            stack.children = children;
+            const entry = Object.entries(children)[0];
+            if (entry[0] !== player.bus_name) {
+                children[player.bus_name] = entry[1];
+                delete children[entry[0]];
+                stack.children = children;
+            }
             playerBox = firstBox!;
         } else {
             playerBox = createPlayerBox({ player })!;
@@ -324,7 +327,7 @@ const removePlayer = (busName: string, childrenMap: PlayerMap, stack: AgsStack) 
         childrenMap.delete(busName);
         if (childrenMap.size === 0) {
             const { playerBox, coverImage } = player;
-            const children = playerBox.children;
+            const { children } = playerBox;
             children.pop()?.destroy();
             playerBox.children = children;
             const { width } = coverImage.get_allocation();
@@ -352,7 +355,7 @@ const removePlayer = (busName: string, childrenMap: PlayerMap, stack: AgsStack) 
                         value.destroy();
                         delete children[key];
                         stack.children = children;
-                    }, stack.transition_duration);
+                    }, stack.transition_duration + 5);
                     break;
                 }
                 last = key;
