@@ -1,5 +1,4 @@
-#!/bin/bash
-cp ~/.profile .profile
+#!/usr/bin/env bash
 
 function update()
 {
@@ -10,14 +9,13 @@ function update()
     echo -n ",exclude ${item}";
     exclude_args+="--exclude $item ";
   done
-  rsync -avq --delete ~/.config/${1} ./.config/ $exclude_args
+  rsync -avq --delete ~/.config/"${1}" ./.config/ "$exclude_args"
   echo
 }
 
 update alacritty themes
 update gtk-3.0
 update ags node_modules types package.json package-lock.json css
-update nvim
 update mako
 update hypr
 update rofi
