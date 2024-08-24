@@ -9,7 +9,7 @@ const outDir = '/tmp/ags/js'
 try {
     console.log("compiling typescript...")
     const jsPath = `${outDir}/main.js`
-    if (GLib.file_test(jsPath, GLib.FileTest.EXISTS)) 
+    if (GLib.file_test(jsPath, GLib.FileTest.EXISTS))
         Gio.File.new_for_path(`${outDir}/main.js`).delete(null);
     print(await execAsync([
         'bun', 'build', entry,

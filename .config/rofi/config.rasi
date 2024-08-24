@@ -11,7 +11,7 @@
 configuration {
 	show-icons: true;
 	font: "Noto Sans CJK 16";
-	display-drun: "";
+	display-drun: " ";
   icon-theme: "Papirus";
 }
 

@@ -1,16 +1,12 @@
-import Widget from "resource:///com/github/Aylur/ags/widget.js";
-import Gtk from "gi://Gtk?version=3.0";
-import Gdk from "gi://Gdk";
-import GdkPixbuf from "gi://GdkPixbuf";
-import { exec } from "resource:///com/github/Aylur/ags/utils.js";
-import { Spacing, asyncSleep, onFirstDrawAction } from "ts/utils";
-import { AnimationDuration, PX_PER_REM } from "ts/vars";
-import { AgsWindow } from "ts/imports";
-import { hyprland } from "resource:///com/github/Aylur/ags/service/hyprland.js";
-
-const emptyCursor = Gdk.Cursor.new_from_pixbuf(
-    Gdk.Display.get_default()!, GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, true, 8, 1, 1), 0, 0
-)
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import Gtk from 'gi://Gtk?version=3.0';
+import Gdk from 'gi://Gdk';
+import {exec} from 'resource:///com/github/Aylur/ags/utils.js';
+import {Spacing, asyncSleep, onFirstDrawAction} from 'ts/utils';
+import {AnimationDuration, PX_PER_REM} from 'ts/vars';
+import {AgsWindow} from 'ts/imports';
+import {hyprland} from 'resource:///com/github/Aylur/ags/service/hyprland.js';
+import {EmptyCursor} from 'ts/utils';
 
 const MenuButton = (label: string, icon: string, win: AgsWindow, action: () => void) => {
     return Widget.Box({
@@ -26,7 +22,7 @@ const MenuButton = (label: string, icon: string, win: AgsWindow, action: () => v
                 }),
                 async on_primary_click() {
                     (win.child as any).class_names = ['power-bg', 'closing'];
-                    win.get_window()?.set_cursor(emptyCursor);
+                    win.get_window()?.set_cursor(EmptyCursor);
                     await asyncSleep(200);
                     action();
                 }
@@ -36,8 +32,8 @@ const MenuButton = (label: string, icon: string, win: AgsWindow, action: () => v
                 label
             })
         ]
-    })
-}
+    });
+};
 
 const PowerMenuBox = (win: AgsWindow) => {
     return Widget.Revealer({
@@ -52,46 +48,45 @@ const PowerMenuBox = (win: AgsWindow) => {
                 MenuButton('Power Off', 'system-shutdown-symbolic', win, () => exec('shutdown now')),
                 MenuButton('Reboot', 'system-reboot-symbolic', win, () => exec('reboot')),
                 MenuButton('Suspend', 'weather-clear-night-symbolic', win, () => {
-                    exec('loginctl lock-session')
-                    exec('systemctl suspend')
+                    exec('loginctl lock-session');
+                    exec('systemctl suspend');
                 }),
                 MenuButton('Hibernate', 'weather-few-clouds-night-symbolic', win, () => {
-                    exec('loginctl lock-session')
-                    exec('systemctl hibernate')
-                }),
+                    exec('loginctl lock-session');
+                    exec('systemctl hibernate');
+                })
             ]
         }),
         setup(self) {
-            onFirstDrawAction(self, () => self.reveal_child = true);
-        },
-    })
-}
+            onFirstDrawAction(win, () => (self.reveal_child = true));
+        }
+    });
+};
 
 const PowerMenuBg = (win: AgsWindow) => {
-    const screen = Gdk.Screen.get_default();
     return Widget.Box({
         class_names: ['power-bg'],
-        width_request: screen?.get_width(),
-        height_request: screen?.get_height(),
+        width_request: win.width_request,
+        height_request: win.height_request,
         orientation: Gtk.Orientation.VERTICAL,
-        children: [
-            Spacing(), PowerMenuBox(win)
-        ]
-    })
-}
+        children: [Spacing(), PowerMenuBox(win)]
+    });
+};
 
-const PowerMenu = (monitor = 0) => Widget.Window({
-    class_names: ['power-win'],
-    name: `power-layer-${monitor}`,
-    exclusivity: 'ignore',
-    layer: 'overlay',
-    monitor,
-    setup(self: AgsWindow) {
-        self.child = PowerMenuBg(self);
-    },
-    click_through: false,
-    keymode: 'exclusive'
-} as any)
+const PowerMenu = (monitor = 0) =>
+    Widget.Window({
+        class_names: ['power-win'],
+        name: `power-layer-${monitor}`,
+        exclusivity: 'ignore',
+        layer: 'overlay',
+        anchor: ['top', 'bottom', 'left', 'right'],
+        monitor,
+        setup(self: AgsWindow) {
+            self.child = PowerMenuBg(self);
+        },
+        click_through: false,
+        keymode: 'exclusive'
+    } as any);
 
 export const openPowerMenu = (() => {
     return () => {
@@ -99,13 +94,12 @@ export const openPowerMenu = (() => {
         if (win) return;
         win = PowerMenu(hyprland.active.monitor.id);
         win.on('key-press-event', (_, event: Gdk.Event) => {
-            if (event.get_keyval()[1] === Gdk.KEY_Escape)
-                win.close();
-        }).on('destroy', () => globalThis['powermenu'] = undefined);
+            if (event.get_keyval()[1] === Gdk.KEY_Escape) win.close();
+        }).on('destroy', () => (globalThis['powermenu'] = undefined));
         globalThis['powermenu'] = win;
         win.show_all();
-    }
-})()
+    };
+})();
 
 export const closePowerMenu = () => {
     const win = globalThis['powermenu'];
@@ -113,6 +107,6 @@ export const closePowerMenu = () => {
         win.close();
         globalThis['powermenu'] = undefined;
     }
-}
+};
 
-export default PowerMenu
+export default PowerMenu;
